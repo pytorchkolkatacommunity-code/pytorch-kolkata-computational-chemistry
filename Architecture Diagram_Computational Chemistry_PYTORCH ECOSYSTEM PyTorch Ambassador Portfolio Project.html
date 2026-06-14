@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)http://127.0.0.1:5500/Architecture.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#fff; font-family: 'Segoe UI', system-ui, sans-serif; }
+
+.diagram-wrap { background: #fff; padding: 0; display: block; }
+
+/* Section header pills */
+.sec-title { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* Tooltip */
+#tip { position:fixed; pointer-events:none; background:#1a1a2e; color:#e8e8f0; padding:6px 10px; border-radius:6px; font-size:11px; opacity:0; transition:opacity .15s; z-index:99; max-width:180px; line-height:1.5; }
+
+/* Metrics Box */
+.metrics-box {
+  position: relative;
+  width: 100%;
+  max-width: 1640px;
+  margin: 40px auto 0;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: white;
+  border-radius: 18px;
+  padding: 22px;
+  border: 2px solid #38bdf8;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.metrics-box h3 {
+  text-align: center;
+  color: #38bdf8;
+  margin-bottom: 18px;
+  font-size: 16px;
+}
+
+.metric {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 10px;
+  margin: 6px 0;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+}
+
+.label {
+  color: #e2e8f0;
+}
+
+.value {
+  color: #22c55e;
+  font-weight: 700;
+}
+
+.stack,
+.domains {
+  margin-top: 10px;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  margin: 14px 0;
+}
+</style>
+</head>
+<body>
+<div id="tip"></div>
+<div class="diagram-wrap">
+<svg id="main-svg" width="100%" viewBox="0 0 1640 2060" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>AI for Scientific Discovery Using PyTorch — Architecture Diagram</title>
+<desc>Seven parallel deep learning pipelines for computational chemistry and materials science, built on PyTorch.</desc>
+
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+    <path d="M2 1.5L8 5L2 8.5" fill="none" stroke="context-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+  </marker>
+  <marker id="arr-dash" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+    <path d="M2 1.5L8 5L2 8.5" fill="none" stroke="context-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+  </marker>
+
+  <!-- Blue gradient - Input -->
+  <lineargradient id="g-blue" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#2563EB" stop-opacity="1"></stop>
+    <stop offset="100%" stop-color="#1D4ED8" stop-opacity="1"></stop>
+  </lineargradient>
+  <lineargradient id="g-blue-light" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#EFF6FF"></stop>
+    <stop offset="100%" stop-color="#DBEAFE"></stop>
+  </lineargradient>
+  <!-- Cyan gradient - Feature Eng -->
+  <lineargradient id="g-cyan" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#0891B2"></stop>
+    <stop offset="100%" stop-color="#0E7490"></stop>
+  </lineargradient>
+  <lineargradient id="g-cyan-light" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#ECFEFF"></stop>
+    <stop offset="100%" stop-color="#CFFAFE"></stop>
+  </lineargradient>
+  <!-- Green gradient - AI Models -->
+  <lineargradient id="g-green" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#059669"></stop>
+    <stop offset="100%" stop-color="#047857"></stop>
+  </lineargradient>
+  <lineargradient id="g-green-light" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#ECFDF5"></stop>
+    <stop offset="100%" stop-color="#D1FAE5"></stop>
+  </lineargradient>
+  <!-- Orange gradient - Latent/Embeddings -->
+  <lineargradient id="g-orange" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#EA580C"></stop>
+    <stop offset="100%" stop-color="#C2410C"></stop>
+  </lineargradient>
+  <lineargradient id="g-orange-light" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#FFF7ED"></stop>
+    <stop offset="100%" stop-color="#FED7AA"></stop>
+  </lineargradient>
+  <!-- Purple gradient - Prediction Outputs -->
+  <lineargradient id="g-purple" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#7C3AED"></stop>
+    <stop offset="100%" stop-color="#6D28D9"></stop>
+  </lineargradient>
+  <lineargradient id="g-purple-light" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#F5F3FF"></stop>
+    <stop offset="100%" stop-color="#EDE9FE"></stop>
+  </lineargradient>
+  <!-- Pink gradient - Applications -->
+  <lineargradient id="g-pink" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#DB2777"></stop>
+    <stop offset="100%" stop-color="#BE185D"></stop>
+  </lineargradient>
+  <lineargradient id="g-pink-light" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#FDF2F8"></stop>
+    <stop offset="100%" stop-color="#FCE7F3"></stop>
+  </lineargradient>
+  <!-- PyTorch ecosystem gradient -->
+  <lineargradient id="g-torch" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#EE4C2C"></stop>
+    <stop offset="100%" stop-color="#FF6B35"></stop>
+  </lineargradient>
+  <lineargradient id="g-torch-bg" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#FFF5F2"></stop>
+    <stop offset="100%" stop-color="#FFE8E0"></stop>
+  </lineargradient>
+  <!-- Master gradient bg -->
+  <lineargradient id="g-master" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#1e1b4b"></stop>
+    <stop offset="50%" stop-color="#312e81"></stop>
+    <stop offset="100%" stop-color="#1e1b4b"></stop>
+  </lineargradient>
+  <lineargradient id="g-discovery" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#065F46"></stop>
+    <stop offset="100%" stop-color="#047857"></stop>
+  </lineargradient>
+  <!-- Section backgrounds -->
+  <lineargradient id="g-sec-chem" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#F0F9FF" stop-opacity="0.7"></stop>
+    <stop offset="100%" stop-color="#E0F2FE" stop-opacity="0.7"></stop>
+  </lineargradient>
+  <lineargradient id="g-sec-mat" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#F0FDF4" stop-opacity="0.7"></stop>
+    <stop offset="100%" stop-color="#DCFCE7" stop-opacity="0.7"></stop>
+  </lineargradient>
+</defs>
+
+<!-- ============================================================ -->
+<!-- MAIN TITLE BANNER -->
+<!-- ============================================================ -->
+<rect x="20" y="16" width="1600" height="72" rx="14" fill="url(#g-master)"></rect>
+<!-- PyTorch flame icon (simplified) -->
+<g transform="translate(52,28)">
+  <ellipse cx="24" cy="30" rx="14" ry="18" fill="#EE4C2C" opacity="0.9"></ellipse>
+  <ellipse cx="24" cy="34" rx="9" ry="12" fill="#FF8C00" opacity="0.85"></ellipse>
+  <ellipse cx="24" cy="38" rx="5" ry="7" fill="#FFD700" opacity="0.9"></ellipse>
+  <path d="M18 20 Q20 10 28 14 Q22 10 26 6 Q30 12 24 18" fill="#FF6B35" opacity="0.8"></path>
+</g>
+<text x="105" y="48" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="26" font-weight="800" fill="#FFFFFF" letter-spacing="0.5">AI for Scientific Discovery Using PyTorch</text>
+<text x="105" y="72" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="13" font-weight="400" fill="#A5B4FC" letter-spacing="0.3">Computational Chemistry · Materials Informatics · Deep Generative Models · Equivariant Neural Networks</text>
+
+<!-- PyTorch badge top right -->
+<rect x="1410" y="28" width="190" height="36" rx="8" fill="#EE4C2C" opacity="0.15"></rect>
+<text x="1505" y="50" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="12" font-weight="700" fill="#EE4C2C" text-anchor="middle">🔥 PyTorch Ecosystem</text>
+
+<!-- ============================================================ -->
+<!-- LEGEND -->
+<!-- ============================================================ -->
+<rect x="20" y="102" width="1600" height="36" rx="8" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"></rect>
+<text x="40" y="124" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="700" fill="#64748B" letter-spacing="0.05em">LEGEND:</text>
+<!-- Blue -->
+<rect x="110" y="114" width="14" height="14" rx="3" fill="url(#g-blue)"></rect>
+<text x="130" y="124" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#374151">Input / Data</text>
+<!-- Cyan -->
+<rect x="228" y="114" width="14" height="14" rx="3" fill="url(#g-cyan)"></rect>
+<text x="248" y="124" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#374151">Feature Engineering</text>
+<!-- Green -->
+<rect x="390" y="114" width="14" height="14" rx="3" fill="url(#g-green)"></rect>
+<text x="410" y="124" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#374151">AI Model Layers</text>
+<!-- Orange -->
+<rect x="540" y="114" width="14" height="14" rx="3" fill="url(#g-orange)"></rect>
+<text x="560" y="124" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#374151">Latent / Embeddings</text>
+<!-- Purple -->
+<rect x="710" y="114" width="14" height="14" rx="3" fill="url(#g-purple)"></rect>
+<text x="730" y="124" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#374151">Prediction Output</text>
+<!-- Pink -->
+<rect x="880" y="114" width="14" height="14" rx="3" fill="url(#g-pink)"></rect>
+<text x="900" y="124" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#374151">Scientific Applications</text>
+<!-- Arrow types -->
+<line x1="1060" y1="121" x2="1100" y2="121" stroke="#64748B" stroke-width="1.5" marker-end="url(#arr)"></line>
+<text x="1108" y="124" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#374151">Data Flow</text>
+<line x1="1200" y1="121" x2="1240" y2="121" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"></line>
+<text x="1248" y="124" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#374151">Inference Flow</text>
+
+<!-- ============================================================ -->
+<!-- SECTION LABEL: COMPUTATIONAL CHEMISTRY (5 pipelines) -->
+<!-- ============================================================ -->
+<rect x="20" y="150" width="1060" height="1590" rx="16" fill="url(#g-sec-chem)" stroke="#BAE6FD" stroke-width="1.5" stroke-dasharray="8,4"></rect>
+<rect x="20" y="150" width="260" height="30" rx="8" fill="#0369A1"></rect>
+<text x="150" y="170" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.05em">⚗️  COMPUTATIONAL CHEMISTRY</text>
+
+<!-- SECTION LABEL: MATERIALS INFORMATICS (2 pipelines) -->
+<rect x="1090" y="150" width="530" height="1590" rx="16" fill="url(#g-sec-mat)" stroke="#BBF7D0" stroke-width="1.5" stroke-dasharray="8,4"></rect>
+<rect x="1090" y="150" width="240" height="30" rx="8" fill="#065F46"></rect>
+<text x="1210" y="170" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.05em">🔬  MATERIALS INFORMATICS</text>
+
+<!-- ============================================================ -->
+<!-- PIPELINE COLUMN HEADERS -->
+<!-- ============================================================ -->
+<!-- P1: Atomic Rep. Learning x=35 w=192 -->
+<!-- P2: Equivariant Potentials x=238 w=192 -->
+<!-- P3: MD Autoencoder x=441 w=192 -->
+<!-- P4: Reaction Yield x=644 w=192 -->
+<!-- P5: Retrosynthesis Transformer x=847 w=192 -->
+<!-- P6: Crystal Graph CNN x=1100 w=242 -->
+<!-- P7: Conditional VAE x=1354 w=242 -->
+
+<!-- Pipeline title bars -->
+<rect x="35" y="186" width="192" height="28" rx="7" fill="#1E40AF"></rect>
+<text x="131" y="204" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">Atomic Representation</text>
+
+<rect x="238" y="186" width="192" height="28" rx="7" fill="#1E40AF"></rect>
+<text x="334" y="204" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">Equivariant Potentials</text>
+
+<rect x="441" y="186" width="192" height="28" rx="7" fill="#1E40AF"></rect>
+<text x="537" y="204" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">MD Autoencoder</text>
+
+<rect x="644" y="186" width="192" height="28" rx="7" fill="#1E40AF"></rect>
+<text x="740" y="204" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">Reaction Yield GNN</text>
+
+<rect x="847" y="186" width="192" height="28" rx="7" fill="#1E40AF"></rect>
+<text x="943" y="204" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">Retrosynthesis Transformer</text>
+
+<rect x="1100" y="186" width="242" height="28" rx="7" fill="#065F46"></rect>
+<text x="1221" y="204" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">Crystal Graph CNN (CGCNN)</text>
+
+<rect x="1354" y="186" width="242" height="28" rx="7" fill="#065F46"></rect>
+<text x="1475" y="204" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">Conditional VAE Generator</text>
+
+<!-- ================================================================ -->
+<!-- HELPER MACROS: Each pipeline block at yBase -->
+<!-- Block: x, yStart, w=178, h per block 44 (text), 50 (2-line) -->
+<!-- ================================================================ -->
+
+<!-- ========================= -->
+<!-- PIPELINE 1: Atomic Rep. Learning -->
+<!-- col x=35, w=192 (inner blocks w=178, x=44) -->
+<!-- ========================= -->
+
+<!-- Block styles: (type, label, sublabel, y) -->
+<!-- type colors: blue=input, cyan=feat, green=model, orange=embed, purple=pred, pink=app -->
+
+<!-- Y positions for P1: 222,274,326,378,430,482,534,586,638,690,742,794,846,898 -->
+<!-- Each block 44h, gap 8 -->
+
+<!-- Block 1: Input - Water Molecule H2O -->
+<g>
+  <rect x="44" y="222" width="174" height="44" rx="8" fill="url(#g-blue-light)" stroke="#2563EB" stroke-width="1.2"></rect>
+  <text x="63" y="239" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#1D4ED8">⬡ INPUT</text>
+  <text x="131" y="253" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#1E3A8A" text-anchor="middle">Water Molecule (H₂O)</text>
+  <line x1="131" y1="266" x2="131" y2="278" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<!-- Block 2: Input - Atomic Symbols + Coords -->
+<g>
+  <rect x="44" y="278" width="174" height="44" rx="8" fill="url(#g-blue-light)" stroke="#2563EB" stroke-width="1.2"></rect>
+  <text x="63" y="294" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#1D4ED8">⚛ ATOMIC DATA</text>
+  <text x="131" y="308" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#1E3A8A" text-anchor="middle">Symbols + Coordinates</text>
+  <line x1="131" y1="322" x2="131" y2="334" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<!-- Block 3: Feature - Atomic Number Encoding -->
+<g>
+  <rect x="44" y="334" width="174" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="63" y="350" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#0E7490">⟨Z⟩ ENCODING</text>
+  <text x="131" y="364" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#164E63" text-anchor="middle">Atomic Number Encoding</text>
+  <line x1="131" y1="378" x2="131" y2="390" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<!-- Block 4: Feature - Feature Matrix [Z,x,y,z] -->
+<g>
+  <rect x="44" y="390" width="174" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="63" y="406" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#0E7490">⊞ MATRIX</text>
+  <text x="131" y="420" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#164E63" text-anchor="middle">Feature Matrix [Z, x, y, z]</text>
+  <line x1="131" y1="434" x2="131" y2="446" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<!-- Block 5: Feature - PyTorch Tensor -->
+<g>
+  <rect x="44" y="446" width="174" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="63" y="462" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#EE4C2C">🔥 PYTORCH</text>
+  <text x="131" y="476" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#164E63" text-anchor="middle">PyTorch Tensor Build</text>
+  <line x1="131" y1="490" x2="131" y2="502" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<!-- Block 6: Model - MLP Layer 4→128 -->
+<g>
+  <rect x="44" y="502" width="174" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="63" y="518" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">⬡ MLP LAYER</text>
+  <text x="131" y="532" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">Linear Layer (4 → 128)</text>
+  <line x1="131" y1="546" x2="131" y2="558" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<!-- Block 7: Model - ReLU -->
+<g>
+  <rect x="44" y="558" width="174" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="63" y="574" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">⚡ ACTIVATION</text>
+  <text x="131" y="588" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">ReLU Activation</text>
+  <line x1="131" y1="602" x2="131" y2="614" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<!-- Block 8: Model - MLP Layer 128→64 -->
+<g>
+  <rect x="44" y="614" width="174" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="63" y="630" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">⬡ MLP LAYER</text>
+  <text x="131" y="644" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">Linear Layer (128 → 64)</text>
+  <line x1="131" y1="658" x2="131" y2="670" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<!-- Block 9: Embedding - Atom Embeddings -->
+<g>
+  <rect x="44" y="670" width="174" height="44" rx="8" fill="url(#g-orange-light)" stroke="#EA580C" stroke-width="1.2"></rect>
+  <text x="63" y="686" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#C2410C">✦ EMBEDDINGS</text>
+  <text x="131" y="700" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#7C2D12" text-anchor="middle">Atom Embeddings</text>
+  <line x1="131" y1="714" x2="131" y2="726" stroke="#EA580C" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<!-- Block 10: Embedding - Molecular Feature Space -->
+<g>
+  <rect x="44" y="726" width="174" height="44" rx="8" fill="url(#g-orange-light)" stroke="#EA580C" stroke-width="1.2"></rect>
+  <text x="63" y="742" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#C2410C">◎ FEATURE SPACE</text>
+  <text x="131" y="756" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#7C2D12" text-anchor="middle">Molecular Feature Space</text>
+  <line x1="131" y1="770" x2="131" y2="782" stroke="#EA580C" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<!-- Block 11: Output - Property Prediction -->
+<g>
+  <rect x="44" y="782" width="174" height="44" rx="8" fill="url(#g-purple-light)" stroke="#7C3AED" stroke-width="1.2"></rect>
+  <text x="63" y="798" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#6D28D9">▶ PREDICTION</text>
+  <text x="131" y="812" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#4C1D95" text-anchor="middle">Property Prediction Head</text>
+  <line x1="131" y1="826" x2="131" y2="838" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"></line>
+</g>
+
+<!-- Applications block P1 -->
+<g>
+  <rect x="44" y="838" width="174" height="76" rx="8" fill="url(#g-pink-light)" stroke="#DB2777" stroke-width="1.2"></rect>
+  <text x="63" y="856" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#BE185D">🧪 APPLICATIONS</text>
+  <text x="62" y="870" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Molecular Properties</text>
+  <text x="62" y="885" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Drug Discovery</text>
+  <text x="62" y="900" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Computational Chem.</text>
+</g>
+
+<!-- ========================= -->
+<!-- PIPELINE 2: Equivariant Potentials (e3nn) -->
+<!-- col x=238, w=192 (inner blocks x=247, w=174) -->
+<!-- ========================= -->
+
+<g>
+  <rect x="247" y="222" width="174" height="44" rx="8" fill="url(#g-blue-light)" stroke="#2563EB" stroke-width="1.2"></rect>
+  <text x="265" y="239" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#1D4ED8">⚛ STRUCTURE</text>
+  <text x="334" y="253" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#1E3A8A" text-anchor="middle">Atomic Structure</text>
+  <line x1="334" y1="266" x2="334" y2="278" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="247" y="278" width="174" height="44" rx="8" fill="url(#g-blue-light)" stroke="#2563EB" stroke-width="1.2"></rect>
+  <text x="265" y="294" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#1D4ED8">⊞ FEATURES</text>
+  <text x="334" y="308" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#1E3A8A" text-anchor="middle">Atomic Features</text>
+  <line x1="334" y1="322" x2="334" y2="334" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="247" y="334" width="174" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="265" y="350" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#0E7490">⊛ IRREPS</text>
+  <text x="334" y="364" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#164E63" text-anchor="middle">Irreducible Repres. (Irreps)</text>
+  <line x1="334" y1="378" x2="334" y2="390" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="247" y="390" width="174" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="265" y="406" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#0E7490">⟳ e3nn</text>
+  <text x="334" y="420" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#164E63" text-anchor="middle">e3nn Equivariant Layer</text>
+  <line x1="334" y1="434" x2="334" y2="446" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="247" y="446" width="174" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="265" y="462" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">✦ SYMMETRY</text>
+  <text x="334" y="476" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">Symmetry Preservation</text>
+  <line x1="334" y1="490" x2="334" y2="502" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="247" y="502" width="174" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="265" y="518" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">⚡ PER-ATOM</text>
+  <text x="334" y="532" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">Per-Atom Energy Pred.</text>
+  <line x1="334" y1="546" x2="334" y2="558" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="247" y="558" width="174" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="265" y="574" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">∑ AGGREGATION</text>
+  <text x="334" y="588" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">Energy Aggregation</text>
+  <line x1="334" y1="602" x2="334" y2="614" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="247" y="614" width="174" height="44" rx="8" fill="url(#g-orange-light)" stroke="#EA580C" stroke-width="1.2"></rect>
+  <text x="265" y="630" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#C2410C">⚡ ENERGY</text>
+  <text x="334" y="644" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#7C2D12" text-anchor="middle">Total Molecular Energy</text>
+  <line x1="334" y1="658" x2="334" y2="670" stroke="#EA580C" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="247" y="670" width="174" height="44" rx="8" fill="url(#g-purple-light)" stroke="#7C3AED" stroke-width="1.2"></rect>
+  <text x="265" y="686" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#6D28D9">▶ OUTPUT</text>
+  <text x="334" y="700" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#4C1D95" text-anchor="middle">Potential Energy Surface</text>
+  <line x1="334" y1="714" x2="334" y2="726" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"></line>
+</g>
+
+<!-- Skip some P2 to align apps at same level -->
+<g>
+  <rect x="247" y="726" width="174" height="188" rx="8" fill="url(#g-pink-light)" stroke="#DB2777" stroke-width="1.2"></rect>
+  <text x="265" y="748" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#BE185D">⚗️ APPLICATIONS</text>
+  <text x="265" y="766" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Molecular Dynamics</text>
+  <text x="265" y="784" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• DFT Acceleration</text>
+  <text x="265" y="802" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Catalyst Design</text>
+  <text x="265" y="820" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Materials Discovery</text>
+</g>
+
+<!-- ========================= -->
+<!-- PIPELINE 3: MD Autoencoder -->
+<!-- col x=441, w=192 (inner x=450, w=174) -->
+<!-- ========================= -->
+
+<g>
+  <rect x="450" y="222" width="174" height="44" rx="8" fill="url(#g-blue-light)" stroke="#2563EB" stroke-width="1.2"></rect>
+  <text x="468" y="239" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#1D4ED8">▶ SIMULATION</text>
+  <text x="537" y="253" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#1E3A8A" text-anchor="middle">MD Simulation</text>
+  <line x1="537" y1="266" x2="537" y2="278" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="450" y="278" width="174" height="44" rx="8" fill="url(#g-blue-light)" stroke="#2563EB" stroke-width="1.2"></rect>
+  <text x="468" y="294" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#1D4ED8">🎞 FRAMES</text>
+  <text x="537" y="308" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#1E3A8A" text-anchor="middle">Trajectory Frames</text>
+  <line x1="537" y1="322" x2="537" y2="334" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="450" y="334" width="174" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="468" y="350" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#0E7490">⊞ FEATURES</text>
+  <text x="537" y="364" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#164E63" text-anchor="middle">Pairwise Distance Feat.</text>
+  <line x1="537" y1="378" x2="537" y2="390" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="450" y="390" width="174" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="468" y="406" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#0E7490">⊞ MATRIX</text>
+  <text x="537" y="420" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#164E63" text-anchor="middle">Feature Matrix (100D)</text>
+  <line x1="537" y1="434" x2="537" y2="446" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="450" y="446" width="174" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="468" y="462" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">⬡ ENCODER</text>
+  <text x="537" y="476" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">Encoder Network</text>
+  <line x1="537" y1="490" x2="537" y2="502" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="450" y="502" width="174" height="44" rx="8" fill="url(#g-orange-light)" stroke="#EA580C" stroke-width="1.2"></rect>
+  <text x="468" y="518" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#C2410C">◎ LATENT</text>
+  <text x="537" y="532" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#7C2D12" text-anchor="middle">Latent Space (2D CVs)</text>
+  <line x1="537" y1="546" x2="537" y2="558" stroke="#EA580C" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="450" y="558" width="174" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="468" y="574" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">⬡ DECODER</text>
+  <text x="537" y="588" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">Decoder Network</text>
+  <line x1="537" y1="602" x2="537" y2="614" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="450" y="614" width="174" height="44" rx="8" fill="url(#g-orange-light)" stroke="#EA580C" stroke-width="1.2"></rect>
+  <text x="468" y="630" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#C2410C">♻ RECONSTRUCT</text>
+  <text x="537" y="644" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#7C2D12" text-anchor="middle">Trajectory Reconstruction</text>
+  <line x1="537" y1="658" x2="537" y2="670" stroke="#EA580C" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="450" y="670" width="174" height="44" rx="8" fill="url(#g-purple-light)" stroke="#7C3AED" stroke-width="1.2"></rect>
+  <text x="468" y="686" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#6D28D9">📉 LOSS</text>
+  <text x="537" y="700" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#4C1D95" text-anchor="middle">MSE Loss Optimization</text>
+  <line x1="537" y1="714" x2="537" y2="726" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="450" y="726" width="174" height="188" rx="8" fill="url(#g-pink-light)" stroke="#DB2777" stroke-width="1.2"></rect>
+  <text x="468" y="748" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#BE185D">🧬 APPLICATIONS</text>
+  <text x="468" y="766" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Protein Folding</text>
+  <text x="468" y="784" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Molecular Motion</text>
+  <text x="468" y="802" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Free Energy Landscapes</text>
+</g>
+
+<!-- ========================= -->
+<!-- PIPELINE 4: Reaction Yield GNN -->
+<!-- col x=644, w=192 (inner x=653, w=174) -->
+<!-- ========================= -->
+
+<g>
+  <rect x="653" y="222" width="174" height="44" rx="8" fill="url(#g-blue-light)" stroke="#2563EB" stroke-width="1.2"></rect>
+  <text x="671" y="239" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#1D4ED8">🧪 DATASET</text>
+  <text x="740" y="253" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#1E3A8A" text-anchor="middle">Chem. Reaction Dataset</text>
+  <line x1="740" y1="266" x2="740" y2="278" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="653" y="278" width="174" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="671" y="294" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#0E7490">⬡ GRAPH BUILD</text>
+  <text x="740" y="308" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#164E63" text-anchor="middle">Mol. Graph Construction</text>
+  <line x1="740" y1="322" x2="740" y2="334" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<!-- Node + Edge features side by side in P4 -->
+<g>
+  <rect x="653" y="334" width="82" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="670" y="350" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="8.5" font-weight="700" fill="#0E7490">● NODES</text>
+  <text x="694" y="364" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="600" fill="#164E63" text-anchor="middle">Atom Feats</text>
+</g>
+<g>
+  <rect x="745" y="334" width="82" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="759" y="350" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="8.5" font-weight="700" fill="#0E7490">— EDGES</text>
+  <text x="786" y="364" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="600" fill="#164E63" text-anchor="middle">Bond Feats</text>
+</g>
+<!-- merge arrow from both -->
+<line x1="694" y1="378" x2="694" y2="395" stroke="#0891B2" stroke-width="1" stroke-dasharray="3,2"></line>
+<line x1="786" y1="378" x2="786" y2="395" stroke="#0891B2" stroke-width="1" stroke-dasharray="3,2"></line>
+<line x1="694" y1="395" x2="786" y2="395" stroke="#0891B2" stroke-width="1"></line>
+<line x1="740" y1="395" x2="740" y2="390" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr)"></line>
+
+<g>
+  <rect x="653" y="390" width="174" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="671" y="406" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">🔥 PyG</text>
+  <text x="740" y="420" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">PyTorch Geometric</text>
+  <line x1="740" y1="434" x2="740" y2="446" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="653" y="446" width="174" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="671" y="462" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">👁 ATTENTION</text>
+  <text x="740" y="476" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">AttentiveFP Layer 1</text>
+  <line x1="740" y1="490" x2="740" y2="502" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="653" y="502" width="174" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="671" y="518" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">👁 ATTENTION</text>
+  <text x="740" y="532" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">AttentiveFP Layer 2</text>
+  <line x1="740" y1="546" x2="740" y2="558" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="653" y="558" width="174" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="671" y="574" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">⊕ POOLING</text>
+  <text x="740" y="588" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">Graph Attention Pooling</text>
+  <line x1="740" y1="602" x2="740" y2="614" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="653" y="614" width="174" height="44" rx="8" fill="url(#g-orange-light)" stroke="#EA580C" stroke-width="1.2"></rect>
+  <text x="671" y="630" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#C2410C">✦ EMBED</text>
+  <text x="740" y="644" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#7C2D12" text-anchor="middle">Reaction Embedding</text>
+  <line x1="740" y1="658" x2="740" y2="670" stroke="#EA580C" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="653" y="670" width="174" height="44" rx="8" fill="url(#g-purple-light)" stroke="#7C3AED" stroke-width="1.2"></rect>
+  <text x="671" y="686" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#6D28D9">📈 PREDICTION</text>
+  <text x="740" y="700" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#4C1D95" text-anchor="middle">Yield Prediction</text>
+  <line x1="740" y1="714" x2="740" y2="726" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="653" y="726" width="174" height="188" rx="8" fill="url(#g-pink-light)" stroke="#DB2777" stroke-width="1.2"></rect>
+  <text x="671" y="748" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#BE185D">💊 APPLICATIONS</text>
+  <text x="671" y="766" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Pharma. Research</text>
+  <text x="671" y="784" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Process Optimization</text>
+  <text x="671" y="802" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Green Chemistry</text>
+</g>
+
+<!-- ========================= -->
+<!-- PIPELINE 5: Retrosynthesis Transformer -->
+<!-- col x=847, w=192 (inner x=856, w=174) -->
+<!-- ========================= -->
+
+<g>
+  <rect x="856" y="222" width="174" height="44" rx="8" fill="url(#g-blue-light)" stroke="#2563EB" stroke-width="1.2"></rect>
+  <text x="874" y="239" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#1D4ED8">🎯 TARGET</text>
+  <text x="943" y="253" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#1E3A8A" text-anchor="middle">Target Product Molecule</text>
+  <line x1="943" y1="266" x2="943" y2="278" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="856" y="278" width="174" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="874" y="294" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#0E7490">⬡ TOKENIZE</text>
+  <text x="943" y="308" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#164E63" text-anchor="middle">SMILES Tokenization</text>
+  <line x1="943" y1="322" x2="943" y2="334" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="856" y="334" width="174" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="874" y="350" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#0E7490">⊞ EMBED</text>
+  <text x="943" y="364" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#164E63" text-anchor="middle">Embedding Layer</text>
+  <line x1="943" y1="378" x2="943" y2="390" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="856" y="390" width="174" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="874" y="406" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">🤖 ENCODER</text>
+  <text x="943" y="420" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">Transformer Encoder ×4</text>
+  <line x1="943" y1="434" x2="943" y2="446" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="856" y="446" width="174" height="44" rx="8" fill="url(#g-orange-light)" stroke="#EA580C" stroke-width="1.2"></rect>
+  <text x="874" y="462" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#C2410C">◎ CONTEXT</text>
+  <text x="943" y="476" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#7C2D12" text-anchor="middle">Chem. Context Repr.</text>
+  <line x1="943" y1="490" x2="943" y2="502" stroke="#EA580C" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="856" y="502" width="174" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="874" y="518" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">🤖 DECODER</text>
+  <text x="943" y="532" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">Transformer Decoder ×4</text>
+  <line x1="943" y1="546" x2="943" y2="558" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="856" y="558" width="174" height="44" rx="8" fill="url(#g-orange-light)" stroke="#EA580C" stroke-width="1.2"></rect>
+  <text x="874" y="574" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#C2410C">✍ GENERATE</text>
+  <text x="943" y="588" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#7C2D12" text-anchor="middle">Reactant Seq. Generation</text>
+  <line x1="943" y1="602" x2="943" y2="614" stroke="#EA580C" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="856" y="614" width="174" height="44" rx="8" fill="url(#g-purple-light)" stroke="#7C3AED" stroke-width="1.2"></rect>
+  <text x="874" y="630" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#6D28D9">🗺 ROUTE</text>
+  <text x="943" y="644" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#4C1D95" text-anchor="middle">Synthetic Route Pred.</text>
+  <line x1="943" y1="658" x2="943" y2="670" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="856" y="670" width="174" height="244" rx="8" fill="url(#g-pink-light)" stroke="#DB2777" stroke-width="1.2"></rect>
+  <text x="874" y="692" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#BE185D">🧬 APPLICATIONS</text>
+  <text x="874" y="712" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Drug Discovery</text>
+  <text x="874" y="730" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Organic Synthesis</text>
+  <text x="874" y="748" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• AI-Assisted Chemistry</text>
+</g>
+
+<!-- ========================= -->
+<!-- PIPELINE 6: Crystal Graph CNN -->
+<!-- col x=1100, w=530/2 (inner x=1109, w=224) -->
+<!-- ========================= -->
+
+<g>
+  <rect x="1109" y="222" width="224" height="44" rx="8" fill="url(#g-blue-light)" stroke="#2563EB" stroke-width="1.2"></rect>
+  <text x="1127" y="239" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#1D4ED8">💎 DATASET</text>
+  <text x="1221" y="253" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#1E3A8A" text-anchor="middle">Crystal Structure Dataset</text>
+  <line x1="1221" y1="266" x2="1221" y2="278" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="1109" y="278" width="224" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="1127" y="294" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#0E7490">⬡ GRAPH GEN</text>
+  <text x="1221" y="308" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#164E63" text-anchor="middle">Crystal Graph Generation</text>
+  <line x1="1221" y1="322" x2="1221" y2="334" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<!-- Atom + Bond features side by side P6 -->
+<g>
+  <rect x="1109" y="334" width="106" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="1126" y="350" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="8.5" font-weight="700" fill="#0E7490">● ATOMS</text>
+  <text x="1162" y="364" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="600" fill="#164E63" text-anchor="middle">Atom Feats</text>
+</g>
+<g>
+  <rect x="1227" y="334" width="106" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="1243" y="350" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="8.5" font-weight="700" fill="#0E7490">— BONDS</text>
+  <text x="1280" y="364" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="600" fill="#164E63" text-anchor="middle">Bond Feats</text>
+</g>
+<line x1="1162" y1="378" x2="1162" y2="395" stroke="#0891B2" stroke-width="1" stroke-dasharray="3,2"></line>
+<line x1="1280" y1="378" x2="1280" y2="395" stroke="#0891B2" stroke-width="1" stroke-dasharray="3,2"></line>
+<line x1="1162" y1="395" x2="1280" y2="395" stroke="#0891B2" stroke-width="1"></line>
+<line x1="1221" y1="395" x2="1221" y2="390" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr)"></line>
+
+<g>
+  <rect x="1109" y="390" width="224" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="1127" y="406" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">⬡ CGCONV</text>
+  <text x="1221" y="420" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">CGConv Layer 1</text>
+  <line x1="1221" y1="434" x2="1221" y2="446" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="1109" y="446" width="224" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="1127" y="462" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">⬡ CGCONV</text>
+  <text x="1221" y="476" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">CGConv Layer 2</text>
+  <line x1="1221" y1="490" x2="1221" y2="502" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="1109" y="502" width="224" height="44" rx="8" fill="url(#g-orange-light)" stroke="#EA580C" stroke-width="1.2"></rect>
+  <text x="1127" y="518" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#C2410C">✦ EMBEDDINGS</text>
+  <text x="1221" y="532" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#7C2D12" text-anchor="middle">Crystal Embeddings</text>
+  <line x1="1221" y1="546" x2="1221" y2="558" stroke="#EA580C" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="1109" y="558" width="224" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="1127" y="574" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">⊕ POOLING</text>
+  <text x="1221" y="588" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">Global Mean Pooling</text>
+  <line x1="1221" y1="602" x2="1221" y2="614" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="1109" y="614" width="224" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="1127" y="630" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">⬡ DENSE LAYER</text>
+  <text x="1221" y="644" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">Dense Prediction Layer</text>
+  <line x1="1221" y1="658" x2="1221" y2="670" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="1109" y="670" width="224" height="44" rx="8" fill="url(#g-purple-light)" stroke="#7C3AED" stroke-width="1.2"></rect>
+  <text x="1127" y="686" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#6D28D9">⚡ PREDICTION</text>
+  <text x="1221" y="700" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#4C1D95" text-anchor="middle">Formation Energy Pred.</text>
+  <line x1="1221" y1="714" x2="1221" y2="726" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="1109" y="726" width="224" height="132" rx="8" fill="url(#g-pink-light)" stroke="#DB2777" stroke-width="1.2"></rect>
+  <text x="1127" y="748" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#BE185D">⚡ APPLICATIONS</text>
+  <text x="1127" y="766" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Batteries</text>
+  <text x="1127" y="784" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Semiconductors</text>
+  <text x="1127" y="802" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Renewable Energy</text>
+  <text x="1127" y="820" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Materials Discovery</text>
+</g>
+
+<!-- ========================= -->
+<!-- PIPELINE 7: Conditional VAE Generator -->
+<!-- col x=1354, w=242 (inner x=1363, w=224) -->
+<!-- ========================= -->
+
+<g>
+  <rect x="1363" y="222" width="224" height="44" rx="8" fill="url(#g-blue-light)" stroke="#2563EB" stroke-width="1.2"></rect>
+  <text x="1381" y="239" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#1D4ED8">🗄 DATABASE</text>
+  <text x="1475" y="253" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#1E3A8A" text-anchor="middle">Material Database</text>
+  <line x1="1475" y1="266" x2="1475" y2="278" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<!-- Material Features + Target side by side -->
+<g>
+  <rect x="1363" y="278" width="106" height="44" rx="8" fill="url(#g-blue-light)" stroke="#2563EB" stroke-width="1.2"></rect>
+  <text x="1378" y="295" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="8.5" font-weight="700" fill="#1D4ED8">⊞ FEATS</text>
+  <text x="1416" y="308" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="600" fill="#1E3A8A" text-anchor="middle">Mat. Feats</text>
+</g>
+<g>
+  <rect x="1481" y="278" width="106" height="44" rx="8" fill="url(#g-blue-light)" stroke="#2563EB" stroke-width="1.2"></rect>
+  <text x="1495" y="295" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="8.5" font-weight="700" fill="#1D4ED8">🎯 TARGET</text>
+  <text x="1534" y="308" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="600" fill="#1E3A8A" text-anchor="middle">Constraints</text>
+</g>
+<line x1="1416" y1="322" x2="1416" y2="339" stroke="#2563EB" stroke-width="1" stroke-dasharray="3,2"></line>
+<line x1="1534" y1="322" x2="1534" y2="339" stroke="#2563EB" stroke-width="1" stroke-dasharray="3,2"></line>
+<line x1="1416" y1="339" x2="1534" y2="339" stroke="#2563EB" stroke-width="1"></line>
+<line x1="1475" y1="339" x2="1475" y2="334" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr)"></line>
+
+<g>
+  <rect x="1363" y="334" width="224" height="44" rx="8" fill="url(#g-cyan-light)" stroke="#0891B2" stroke-width="1.2"></rect>
+  <text x="1381" y="350" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#0E7490">⬡ ENCODER</text>
+  <text x="1475" y="364" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#164E63" text-anchor="middle">Conditional Encoder</text>
+  <line x1="1475" y1="378" x2="1475" y2="390" stroke="#0891B2" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<!-- μ and σ² side by side -->
+<g>
+  <rect x="1363" y="390" width="106" height="44" rx="8" fill="url(#g-orange-light)" stroke="#EA580C" stroke-width="1.2"></rect>
+  <text x="1378" y="406" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#C2410C">μ MEAN</text>
+  <text x="1416" y="420" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="600" fill="#7C2D12" text-anchor="middle">Latent μ</text>
+</g>
+<g>
+  <rect x="1481" y="390" width="106" height="44" rx="8" fill="url(#g-orange-light)" stroke="#EA580C" stroke-width="1.2"></rect>
+  <text x="1495" y="406" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#C2410C">σ² VAR</text>
+  <text x="1534" y="420" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" font-weight="600" fill="#7C2D12" text-anchor="middle">Latent σ²</text>
+</g>
+<line x1="1416" y1="434" x2="1416" y2="451" stroke="#EA580C" stroke-width="1" stroke-dasharray="3,2"></line>
+<line x1="1534" y1="434" x2="1534" y2="451" stroke="#EA580C" stroke-width="1" stroke-dasharray="3,2"></line>
+<line x1="1416" y1="451" x2="1534" y2="451" stroke="#EA580C" stroke-width="1"></line>
+<line x1="1475" y1="451" x2="1475" y2="446" stroke="#EA580C" stroke-width="1.5" marker-end="url(#arr)"></line>
+
+<g>
+  <rect x="1363" y="446" width="224" height="44" rx="8" fill="url(#g-orange-light)" stroke="#EA580C" stroke-width="1.2"></rect>
+  <text x="1381" y="462" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#C2410C">∼ REPARAMETRIZE</text>
+  <text x="1475" y="476" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#7C2D12" text-anchor="middle">Reparameterization Trick</text>
+  <line x1="1475" y1="490" x2="1475" y2="502" stroke="#EA580C" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="1363" y="502" width="224" height="44" rx="8" fill="url(#g-orange-light)" stroke="#EA580C" stroke-width="1.2"></rect>
+  <text x="1381" y="518" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#C2410C">◎ LATENT SPACE</text>
+  <text x="1475" y="532" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#7C2D12" text-anchor="middle">Latent Material Space</text>
+  <line x1="1475" y1="546" x2="1475" y2="558" stroke="#EA580C" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="1363" y="558" width="224" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="1381" y="574" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">⬡ DECODER</text>
+  <text x="1475" y="588" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">Conditional Decoder</text>
+  <line x1="1475" y1="602" x2="1475" y2="614" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="1363" y="614" width="224" height="44" rx="8" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.2"></rect>
+  <text x="1381" y="630" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#047857">✨ GENERATION</text>
+  <text x="1475" y="644" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#064E3B" text-anchor="middle">Novel Material Generation</text>
+  <line x1="1475" y1="658" x2="1475" y2="670" stroke="#059669" stroke-width="1.5" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="1363" y="670" width="224" height="44" rx="8" fill="url(#g-purple-light)" stroke="#7C3AED" stroke-width="1.2"></rect>
+  <text x="1381" y="686" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#6D28D9">💎 CANDIDATES</text>
+  <text x="1475" y="700" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#4C1D95" text-anchor="middle">Generated Mat. Candidates</text>
+  <line x1="1475" y1="714" x2="1475" y2="726" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"></line>
+</g>
+
+<g>
+  <rect x="1363" y="726" width="224" height="132" rx="8" fill="url(#g-pink-light)" stroke="#DB2777" stroke-width="1.2"></rect>
+  <text x="1381" y="748" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="700" fill="#BE185D">🔋 APPLICATIONS</text>
+  <text x="1381" y="766" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Battery Materials</text>
+  <text x="1381" y="784" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Solar Materials</text>
+  <text x="1381" y="802" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Aerospace Materials</text>
+  <text x="1381" y="820" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="10.5" fill="#831843">• Semiconductor Design</text>
+</g>
+
+<!-- ================================================================ -->
+<!-- PYTORCH ECOSYSTEM BAR -->
+<!-- ================================================================ -->
+<rect x="20" y="926" width="1600" height="56" rx="12" fill="url(#g-torch-bg)" stroke="#EE4C2C" stroke-width="1.5"></rect>
+<text x="48" y="948" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" font-weight="700" fill="#EE4C2C" letter-spacing="0.05em">🔥 PYTORCH ECOSYSTEM</text>
+
+<!-- Ecosystem pills -->
+<rect x="248" y="932" width="110" height="34" rx="8" fill="#EE4C2C" opacity="0.12"></rect>
+<text x="303" y="953" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" font-weight="700" fill="#C2410C" text-anchor="middle">PyTorch Core</text>
+
+<rect x="370" y="932" width="148" height="34" rx="8" fill="#EE4C2C" opacity="0.12"></rect>
+<text x="444" y="953" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" font-weight="700" fill="#C2410C" text-anchor="middle">PyTorch Geometric</text>
+
+<rect x="530" y="932" width="72" height="34" rx="8" fill="#EE4C2C" opacity="0.12"></rect>
+<text x="566" y="953" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" font-weight="700" fill="#C2410C" text-anchor="middle">e3nn</text>
+
+<rect x="614" y="932" width="110" height="34" rx="8" fill="#EE4C2C" opacity="0.12"></rect>
+<text x="669" y="953" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" font-weight="700" fill="#C2410C" text-anchor="middle">Transformers</text>
+
+<rect x="736" y="932" width="164" height="34" rx="8" fill="#EE4C2C" opacity="0.12"></rect>
+<text x="818" y="953" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" font-weight="700" fill="#C2410C" text-anchor="middle">Deep Generative Models</text>
+
+<rect x="912" y="932" width="100" height="34" rx="8" fill="#EE4C2C" opacity="0.12"></rect>
+<text x="962" y="953" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" font-weight="700" fill="#C2410C" text-anchor="middle">TorchScript</text>
+
+<rect x="1024" y="932" width="90" height="34" rx="8" fill="#EE4C2C" opacity="0.12"></rect>
+<text x="1069" y="953" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" font-weight="700" fill="#C2410C" text-anchor="middle">CUDA / GPU</text>
+
+<rect x="1126" y="932" width="118" height="34" rx="8" fill="#EE4C2C" opacity="0.12"></rect>
+<text x="1185" y="953" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" font-weight="700" fill="#C2410C" text-anchor="middle">torch.autograd</text>
+
+<rect x="1256" y="932" width="110" height="34" rx="8" fill="#EE4C2C" opacity="0.12"></rect>
+<text x="1311" y="953" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" font-weight="700" fill="#C2410C" text-anchor="middle">DataLoader API</text>
+
+<!-- ================================================================ -->
+<!-- GRAND MASTER CONVERGENCE -->
+<!-- ================================================================ -->
+
+<!-- Convergence funnel arrows from each pipeline to center bar -->
+<line x1="131" y1="914" x2="131" y2="988" stroke="#2563EB" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"></line>
+<line x1="334" y1="914" x2="334" y2="988" stroke="#0891B2" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"></line>
+<line x1="537" y1="914" x2="537" y2="988" stroke="#059669" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"></line>
+<line x1="740" y1="914" x2="740" y2="988" stroke="#EA580C" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"></line>
+<line x1="943" y1="914" x2="943" y2="988" stroke="#7C3AED" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"></line>
+<line x1="1221" y1="858" x2="1221" y2="988" stroke="#059669" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"></line>
+<line x1="1475" y1="858" x2="1475" y2="988" stroke="#DB2777" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"></line>
+
+<!-- Convergence label -->
+<text x="820" y="982" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" font-weight="600" fill="#6B7280" text-anchor="middle">↓ Unified PyTorch Training Infrastructure ↓</text>
+
+<!-- ================================================================ -->
+<!-- ACCELERATED SCIENTIFIC DISCOVERY BANNER -->
+<!-- ================================================================ -->
+<rect x="20" y="998" width="1600" height="80" rx="14" fill="url(#g-discovery)"></rect>
+<text x="820" y="1030" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="22" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.3">⚡ Accelerated Scientific Discovery</text>
+<text x="820" y="1058" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="13" font-weight="400" fill="#A7F3D0" text-anchor="middle" letter-spacing="0.2">From atomic coordinates to breakthrough insights — powered by PyTorch deep learning</text>
+
+<!-- ================================================================ -->
+<!-- OUTCOME DOMAIN CARDS -->
+<!-- ================================================================ -->
+
+<!-- Row of 5 outcome cards -->
+<!-- Card 1: Drug Discovery -->
+<rect x="20" y="1094" width="308" height="120" rx="12" fill="url(#g-blue-light)" stroke="#2563EB" stroke-width="1.5"></rect>
+<rect x="20" y="1094" width="308" height="36" rx="12" fill="#2563EB"></rect>
+<rect x="20" y="1118" width="308" height="12" fill="#2563EB"></rect>
+<text x="174" y="1117" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">💊 Drug Discovery</text>
+<text x="44" y="1148" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#1E40AF">• Molecular property prediction</text>
+<text x="44" y="1164" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#1E40AF">• Retrosynthesis planning</text>
+<text x="44" y="1180" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#1E40AF">• ADMET property screening</text>
+<text x="44" y="1196" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#1E40AF">• Target binding affinity</text>
+
+<!-- Card 2: Materials Design -->
+<rect x="340" y="1094" width="308" height="120" rx="12" fill="url(#g-green-light)" stroke="#059669" stroke-width="1.5"></rect>
+<rect x="340" y="1094" width="308" height="36" rx="12" fill="#059669"></rect>
+<rect x="340" y="1118" width="308" height="12" fill="#059669"></rect>
+<text x="494" y="1117" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">💎 Materials Design</text>
+<text x="364" y="1148" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#065F46">• Formation energy prediction</text>
+<text x="364" y="1164" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#065F46">• Novel material generation</text>
+<text x="364" y="1180" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#065F46">• Crystal structure prediction</text>
+<text x="364" y="1196" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#065F46">• Band gap engineering</text>
+
+<!-- Card 3: Catalyst Optimization -->
+<rect x="660" y="1094" width="308" height="120" rx="12" fill="url(#g-orange-light)" stroke="#EA580C" stroke-width="1.5"></rect>
+<rect x="660" y="1094" width="308" height="36" rx="12" fill="#EA580C"></rect>
+<rect x="660" y="1118" width="308" height="12" fill="#EA580C"></rect>
+<text x="814" y="1117" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">⚗️ Catalyst Optimization</text>
+<text x="684" y="1148" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#7C2D12">• Reaction yield prediction</text>
+<text x="684" y="1164" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#7C2D12">• Equivariant force fields</text>
+<text x="684" y="1180" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#7C2D12">• Green chemistry routes</text>
+<text x="684" y="1196" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#7C2D12">• DFT acceleration</text>
+
+<!-- Card 4: Battery Research -->
+<rect x="980" y="1094" width="308" height="120" rx="12" fill="url(#g-purple-light)" stroke="#7C3AED" stroke-width="1.5"></rect>
+<rect x="980" y="1094" width="308" height="36" rx="12" fill="#7C3AED"></rect>
+<rect x="980" y="1118" width="308" height="12" fill="#7C3AED"></rect>
+<text x="1134" y="1117" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">🔋 Battery Research</text>
+<text x="1004" y="1148" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#4C1D95">• Electrolyte screening</text>
+<text x="1004" y="1164" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#4C1D95">• Electrode material design</text>
+<text x="1004" y="1180" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#4C1D95">• Li-ion conductivity pred.</text>
+<text x="1004" y="1196" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#4C1D95">• Solid-state interfaces</text>
+
+<!-- Card 5: Molecular Simulation -->
+<rect x="1300" y="1094" width="320" height="120" rx="12" fill="url(#g-pink-light)" stroke="#DB2777" stroke-width="1.5"></rect>
+<rect x="1300" y="1094" width="320" height="36" rx="12" fill="#DB2777"></rect>
+<rect x="1300" y="1118" width="320" height="12" fill="#DB2777"></rect>
+<text x="1460" y="1117" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">🌀 Molecular Simulation</text>
+<text x="1324" y="1148" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#831843">• Protein folding dynamics</text>
+<text x="1324" y="1164" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#831843">• Free energy landscapes</text>
+<text x="1324" y="1180" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#831843">• Collective variable analysis</text>
+<text x="1324" y="1196" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" fill="#831843">• Neural force fields</text>
+
+<!-- ================================================================ -->
+<!-- GRAND MASTER TAXONOMY TREE -->
+<!-- ================================================================ -->
+<rect x="20" y="1230" width="1600" height="386" rx="14" fill="#FAFAFA" stroke="#E5E7EB" stroke-width="1.5"></rect>
+<rect x="20" y="1230" width="1600" height="40" rx="14" fill="url(#g-master)"></rect>
+<rect x="20" y="1256" width="1600" height="14" fill="url(#g-master)"></rect>
+<text x="820" y="1257" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="15" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.5">🌐 Grand Master Taxonomy — AI for Scientific Discovery Using PyTorch</text>
+
+<!-- Root node -->
+<rect x="655" y="1282" width="310" height="40" rx="10" fill="url(#g-master)"></rect>
+<text x="810" y="1307" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="12.5" font-weight="700" fill="#E0E7FF" text-anchor="middle">AI for Scientific Discovery (PyTorch)</text>
+
+<!-- Root to Comp Chem + Mat Inf -->
+<line x1="810" y1="1322" x2="810" y2="1338" stroke="#6366F1" stroke-width="1.5"></line>
+<line x1="400" y1="1338" x2="1220" y2="1338" stroke="#6366F1" stroke-width="1.5"></line>
+<line x1="400" y1="1338" x2="400" y2="1354" stroke="#6366F1" stroke-width="1.5"></line>
+<line x1="1220" y1="1338" x2="1220" y2="1354" stroke="#6366F1" stroke-width="1.5"></line>
+
+<!-- Level 1: Two domain nodes -->
+<rect x="230" y="1354" width="340" height="34" rx="8" fill="#1E40AF"></rect>
+<text x="400" y="1376" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="12" font-weight="700" fill="#DBEAFE" text-anchor="middle">Computational Chemistry (5 models)</text>
+
+<rect x="1050" y="1354" width="340" height="34" rx="8" fill="#065F46"></rect>
+<text x="1220" y="1376" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="12" font-weight="700" fill="#D1FAE5" text-anchor="middle">Materials Informatics (2 models)</text>
+
+<!-- Comp Chem branches -->
+<line x1="400" y1="1388" x2="400" y2="1404" stroke="#1E40AF" stroke-width="1.5"></line>
+<line x1="82" y1="1404" x2="718" y2="1404" stroke="#1E40AF" stroke-width="1.2"></line>
+
+<line x1="82" y1="1404" x2="82" y2="1420" stroke="#1E40AF" stroke-width="1.2"></line>
+<line x1="220" y1="1404" x2="220" y2="1420" stroke="#1E40AF" stroke-width="1.2"></line>
+<line x1="400" y1="1404" x2="400" y2="1420" stroke="#1E40AF" stroke-width="1.2"></line>
+<line x1="580" y1="1404" x2="580" y2="1420" stroke="#1E40AF" stroke-width="1.2"></line>
+<line x1="718" y1="1404" x2="718" y2="1420" stroke="#1E40AF" stroke-width="1.2"></line>
+
+<rect x="30" y="1420" width="100" height="48" rx="6" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"></rect>
+<text x="80" y="1436" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#1E3A8A" text-anchor="middle">Atomic</text>
+<text x="80" y="1448" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#1E3A8A" text-anchor="middle">Representation</text>
+<text x="80" y="1460" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" fill="#3B82F6" text-anchor="middle">MLP · ReLU</text>
+
+<rect x="168" y="1420" width="106" height="48" rx="6" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"></rect>
+<text x="221" y="1436" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#1E3A8A" text-anchor="middle">Equivariant</text>
+<text x="221" y="1448" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#1E3A8A" text-anchor="middle">Potentials</text>
+<text x="221" y="1460" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" fill="#3B82F6" text-anchor="middle">e3nn · Irreps</text>
+
+<rect x="348" y="1420" width="106" height="48" rx="6" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"></rect>
+<text x="401" y="1436" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#1E3A8A" text-anchor="middle">MD</text>
+<text x="401" y="1448" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#1E3A8A" text-anchor="middle">Autoencoder</text>
+<text x="401" y="1460" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" fill="#3B82F6" text-anchor="middle">VAE · 2D CVs</text>
+
+<rect x="528" y="1420" width="106" height="48" rx="6" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"></rect>
+<text x="581" y="1436" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#1E3A8A" text-anchor="middle">Reaction Yield</text>
+<text x="581" y="1448" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#1E3A8A" text-anchor="middle">Prediction</text>
+<text x="581" y="1460" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" fill="#3B82F6" text-anchor="middle">AttentiveFP · PyG</text>
+
+<rect x="666" y="1420" width="106" height="48" rx="6" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"></rect>
+<text x="719" y="1436" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#1E3A8A" text-anchor="middle">Retrosynthesis</text>
+<text x="719" y="1448" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#1E3A8A" text-anchor="middle">Transformer</text>
+<text x="719" y="1460" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" fill="#3B82F6" text-anchor="middle">Enc/Dec · SMILES</text>
+
+<!-- Materials branches -->
+<line x1="1220" y1="1388" x2="1220" y2="1404" stroke="#065F46" stroke-width="1.5"></line>
+<line x1="1100" y1="1404" x2="1340" y2="1404" stroke="#065F46" stroke-width="1.2"></line>
+<line x1="1100" y1="1404" x2="1100" y2="1420" stroke="#065F46" stroke-width="1.2"></line>
+<line x1="1340" y1="1404" x2="1340" y2="1420" stroke="#065F46" stroke-width="1.2"></line>
+
+<rect x="1048" y="1420" width="106" height="48" rx="6" fill="#D1FAE5" stroke="#059669" stroke-width="1"></rect>
+<text x="1101" y="1436" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#064E3B" text-anchor="middle">Crystal Graph</text>
+<text x="1101" y="1448" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#064E3B" text-anchor="middle">CNN (CGCNN)</text>
+<text x="1101" y="1460" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" fill="#059669" text-anchor="middle">CGConv · Pooling</text>
+
+<rect x="1288" y="1420" width="106" height="48" rx="6" fill="#D1FAE5" stroke="#059669" stroke-width="1"></rect>
+<text x="1341" y="1436" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#064E3B" text-anchor="middle">Conditional</text>
+<text x="1341" y="1448" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#064E3B" text-anchor="middle">VAE Generator</text>
+<text x="1341" y="1460" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" fill="#059669" text-anchor="middle">μ, σ² · Reparametrize</text>
+
+<!-- PyTorch Ecosystem node in tree -->
+<line x1="810" y1="1388" x2="1560" y2="1388" stroke="#EE4C2C" stroke-width="1" stroke-dasharray="5,3" opacity="0.5"></line>
+<rect x="1440" y="1354" width="170" height="34" rx="8" fill="#FFF5F2" stroke="#EE4C2C" stroke-width="1.2"></rect>
+<text x="1525" y="1376" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" font-weight="700" fill="#EE4C2C" text-anchor="middle">🔥 PyTorch Core</text>
+
+<line x1="1525" y1="1388" x2="1525" y2="1404" stroke="#EE4C2C" stroke-width="1" stroke-dasharray="4,3"></line>
+<line x1="1430" y1="1404" x2="1600" y2="1404" stroke="#EE4C2C" stroke-width="1"></line>
+<line x1="1430" y1="1404" x2="1430" y2="1420" stroke="#EE4C2C" stroke-width="1"></line>
+<line x1="1525" y1="1404" x2="1525" y2="1420" stroke="#EE4C2C" stroke-width="1"></line>
+<line x1="1600" y1="1404" x2="1600" y2="1420" stroke="#EE4C2C" stroke-width="1"></line>
+
+<rect x="1390" y="1420" width="80" height="34" rx="5" fill="#FFF5F2" stroke="#EE4C2C" stroke-width="0.8"></rect>
+<text x="1430" y="1441" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="600" fill="#C2410C" text-anchor="middle">autograd</text>
+
+<rect x="1483" y="1420" width="80" height="34" rx="5" fill="#FFF5F2" stroke="#EE4C2C" stroke-width="0.8"></rect>
+<text x="1523" y="1441" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="600" fill="#C2410C" text-anchor="middle">DataLoader</text>
+
+<rect x="1576" y="1420" width="40" height="34" rx="5" fill="#FFF5F2" stroke="#EE4C2C" stroke-width="0.8"></rect>
+<text x="1596" y="1441" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="9" font-weight="600" fill="#C2410C" text-anchor="middle">JIT</text>
+
+<!-- ================================================================ -->
+<!-- BOTTOM FOOTER -->
+<!-- ================================================================ -->
+<rect x="20" y="1632" width="1600" height="40" rx="10" fill="#F1F5F9" stroke="#E2E8F0" stroke-width="1"></rect>
+<text x="820" y="1657" font-family="&#39;Segoe UI&#39;,system-ui,sans-serif" font-size="11" font-weight="500" fill="#64748B" text-anchor="middle">Atomic Coordinates → Feature Engineering → Deep Learning → Scientific Breakthroughs  |  7 Parallel Pipelines  |  🔥 PYTORCH ECOSYSTEM | PyTorch Ambassador Portfolio Project</text>
+
+</svg>
+</div>
+<div class="metrics-box">
+    <h3>📊 Project Portfolio Summary</h3>
+
+    <div class="metric">
+        <span class="label">Projects Demonstrated</span>
+        <span class="value">7</span>
+    </div>
+
+    <div class="metric">
+        <span class="label">PyTorch Libraries</span>
+        <span class="value">6+</span>
+    </div>
+
+    <div class="metric">
+        <span class="label">Research Domains</span>
+        <span class="value">2</span>
+    </div>
+
+    <div class="metric">
+        <span class="label">AI Techniques</span>
+        <span class="value">5+</span>
+    </div>
+
+    <div class="metric">
+        <span class="label">Scientific Applications</span>
+        <span class="value">7+</span>
+    </div>
+
+    <hr>
+
+    <div class="stack">
+        <strong>PyTorch Stack</strong><br>
+        • PyTorch<br>
+        • PyTorch Geometric<br>
+        • e3nn<br>
+        • Transformers<br>
+        • CUDA/GPU<br>
+        • TorchScript
+    </div>
+
+    <hr>
+
+    <div class="domains">
+        <strong>Research Coverage</strong><br>
+        • Computational Chemistry<br>
+        • Materials Informatics
+    </div>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+
+</div></body></html>
